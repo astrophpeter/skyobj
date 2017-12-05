@@ -1,5 +1,10 @@
-
-
+#############################
+##        skyobj           ##
+##    A class to find      ##
+## microlensing candidates ##
+## @author Peter McGill    ##
+## @email pm625@cam.ac.uk  ##
+#############################
 
 class skyobj(object):
 
