@@ -1,0 +1,5 @@
+language: python
+install:
+ - pip install astropy
+
+script: python test_skyobj.py
