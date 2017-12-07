@@ -34,7 +34,7 @@ class skyobj(object):
 
 
 
-	def s2tp(ra, dec):
+	def s2tp(self,ra, dec):
     		"""
 		Convert from spherical coordinate system
 		to tagent plane coordinates
