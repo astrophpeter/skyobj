@@ -6,6 +6,8 @@
 ## @email pm625@cam.ac.uk  ##
 #############################
 
+import numpy as np
+
 class skyobj(object):
 
 
@@ -21,7 +23,7 @@ class skyobj(object):
 		self.ra = ra
 		self.dec = dec
 		self.epoch = epoch
-		
+
 		self.xi,self.eta = self.s2tp(ra,dec)
 	
 				
@@ -35,13 +37,13 @@ class skyobj(object):
 
 
 	def s2tp(self,ra, dec):
-    		"""
+		"""
 		Convert from spherical coordinate system
 		to tagent plane coordinates
 		"""
  
 		#Set the position of the tagent plane
-                #at the position of the lens
+		#at the position of the lens
 		raz = self.ra
 		decz = self.dec
  
@@ -49,7 +51,7 @@ class skyobj(object):
 		_rar = np.radians(ra)
 		_razr = np.radians(raz)
 		_decr = np.radians(dec)
-    		_deczr = np.radians(decz)
+		_deczr = np.radians(decz)
  
 		# Trig functions
 		_sdecz = np.sin(_deczr)
@@ -59,9 +61,9 @@ class skyobj(object):
 		_radifj = _rar - _razr
 		_sradifj = np.sin(_radifj)
 		_cradifj = np.cos(_radifj)
- 
+
 		# Reciprocal of star vector length to tangent plane
-    		_denomj = (_sdecj*_sdecz)+(_cdecj*_cdecz*_cradifj)
+		_denomj = (_sdecj*_sdecz)+(_cdecj*_cdecz*_cradifj)
  
 		# Compute tangent plane coordinates
 		xi = ((180/np.pi)*3600)*_cdecj*_sradifj/_denomj
