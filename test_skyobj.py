@@ -13,13 +13,13 @@ class Testskyobj(unittest.TestCase):
 		self.assertEqual(self.obj1.id,123456789)
 
 	def test_ra_init(self):
-		self.assertEqual(self.obj1.ra,30.0)
+		self.assertEqual(self.obj1.ra_0,30.0)
 
 	def test_dec_init(self):
-		self.assertEqual(self.obj1.dec,60.0)
+		self.assertEqual(self.obj1.dec_0,60.0)
 
 	def test_epoch_init(self):
-		self.assertEqual(self.obj1.epoch,2015.0)
+		self.assertEqual(self.obj1.epoch_0,2015.0)
 
 	def test_pmra_init(self):
 		self.assertEqual(self.obj1.pmra,100.0)

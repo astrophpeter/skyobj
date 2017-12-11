@@ -7,9 +7,13 @@
 #############################
 
 import numpy as np
+from astropy.time import Time
+from scipy.optimize import minimize_scalar
+import tangentPlaneUtils as tp
 
 class skyobj(object):
 
+	MAS_TO_DEG = 1.0 / (3600.0 * 1000.0)
 
 	def __init__(self,id=None,ra=None,dec=None,epoch=None,pmra=None,pmdec=None,parallax=None):
 		"""
@@ -20,11 +24,11 @@ class skyobj(object):
 		
 		
 		self.id  = id
-		self.ra = ra
-		self.dec = dec
-		self.epoch = epoch
+		self.ra_0 = ra
+		self.dec_0 = dec
+		self.epoch_0 = epoch
 
-		self.xi,self.eta = self.s2tp(ra,dec)
+		self.xi_0,self.eta_0 = tp.s2tp(ra,dec,ra,dec)
 	
 				
 		#set proper motions and parallax to zero if
@@ -34,39 +38,128 @@ class skyobj(object):
 		self.parallax = parallax if parallax else 0.0
 		
 
-
-
-	def s2tp(self,ra, dec):
+	def getRaDec(self,epoch):	
 		"""
-		Convert from spherical coordinate system
-		to tagent plane coordinates
-		"""
- 
-		#Set the position of the tagent plane
-		#at the position of the lens
-		raz = self.ra
-		decz = self.dec
- 
-		# convert to radians
-		_rar = np.radians(ra)
-		_razr = np.radians(raz)
-		_decr = np.radians(dec)
-		_deczr = np.radians(decz)
- 
-		# Trig functions
-		_sdecz = np.sin(_deczr)
-		_sdecj = np.sin(_decr)
-		_cdecz = np.cos(_deczr)
-		_cdecj = np.cos(_decr)
-		_radifj = _rar - _razr
-		_sradifj = np.sin(_radifj)
-		_cradifj = np.cos(_radifj)
+		Get Equtorial coordinates of the skyobj 
+                at epoch time - does not take into 
+		account parallax.
 
-		# Reciprocal of star vector length to tangent plane
-		_denomj = (_sdecj*_sdecz)+(_cdecj*_cdecz*_cradifj)
- 
-		# Compute tangent plane coordinates
-		xi = ((180/np.pi)*3600)*_cdecj*_sradifj/_denomj
-		eta = ((180/np.pi)*3600)*(_sdecj*_cdecz-_cdecj*_sdecz*_cradifj)/_denomj
- 
-		return xi, eta
+		Args:
+			epoch (float): Decimal Julian Year 
+				       time. 
+
+		Returns:
+			ra,dec (float,float): Right ascesnion,
+					      Declination 
+					      [Degrees]			
+		"""
+
+		decfinal = (self.dec_0 + (epoch - self.epoch_0) * 
+			self.pmdec * self.MAS_TO_DEG)
+		rafinal = (self.ra_0 + (epoch - self.epoch_0) * 
+			(self.pmra / np.cos(np.deg2rad(self.dec_0))) * self.MAS_TO_DEG)
+		
+		return rafinal, decfinal 
+	
+	def getXiEta(self,epoch):
+		"""	
+		Get Tangent Plane coordinations 
+		of source (Xi,Eta) of skyobj at time epoch
+		defined from the position of the skyobj
+		at it's initial referece position.
+
+		Args:
+			epoch (float): Decimal Julian Year
+				       Time.
+
+		Returns:
+
+			Xi,Eta (float,float): Tangent Plane
+					      coordinatea [mas]
+		"""
+		
+		mjd = Time(epoch, format='decimalyear').mjd
+		
+		EtaFinal = (-(self.parallax) *tp.RdotN(mjd, self.ra_0, self.dec_0) + 
+			(self.pmdec) * (epoch - self.epoch_0) + self.eta_0)
+		XiFinal = ((self.parallax)* tp.RdotW(mjd, self.ra_0) + 
+			(self.pmra) * (epoch - self.epoch_0) + self.xi_0)
+
+		return XiFinal, EtaFinal
+
+	def getSeparation(self,epoch,source):
+		"""
+		Get angular separation of two skyobj
+		(self,source) at time epoch, in tangent
+		plane coordinates.
+
+		Args: 
+			epoch (float): Decimal Julian Year
+				       Time
+		
+			source (skyobj): source to find separation
+					 between.
+
+		Returns: 
+			separation (float): Angular Separation
+					    [mas]
+			
+		"""
+
+		lens_xi ,lens_eta = self.getXiEta(epoch)
+	
+		#set the source tanget plane coords
+		#defined by the lens reference position.
+		source.xi_0,source.eta_0 = tp.s2tp(source.ra_0,source.dec_0,self.ra_0,self.dec_0)
+
+		source_xi,source_eta = source.getXiEta(epoch)
+	
+  
+		return np.hypot(lens_xi-source_xi, lens_eta-source_eta)
+	
+	def getMinTime(self,source):
+		"""
+		Get the time of closest approach between 
+		the skyobj and a source.
+
+		Args:
+			source (skyobj): source skyobj to 
+					 to get closest approach
+					 time for.
+					
+		Returns: 
+			minTime (float): The time of closest
+					 approach. [Decimal Years]
+		"""
+	
+		minimum = minimize_scalar(self.getSeparation,args=(source))
+		return minimum.x
+
+	def getMinDist(self,source):
+		"""
+                Get the closest approach
+		separation between the skyobj 
+		and source.
+	
+		Args:
+			source (skyobj): source skyobj to
+                                         to get closest separation
+                                         distance for.
+		Returns:
+
+			minDist (float): Distance of Closest
+					 Approach [mas]
+		"""
+
+		minTime = self.getMinTime(source)
+		return self.getSeparation(minTime,source)
+	
+lens = skyobj(id=1,ra=176.454907296219, dec=-64.842957135494, pmra=2662.036, pmdec=-345.183, parallax=-215.78,epoch=2015.0)
+source = skyobj(id=2,ra=176.46360456073, dec=-64.8432977866831, pmra=-19.5, pmdec=-17.9,epoch=2015.0)
+
+lens.getMinTime(source)
+
+print(lens.getMinDist(source))
+
+
+
