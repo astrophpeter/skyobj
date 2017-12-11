@@ -153,6 +153,34 @@ class skyobj(object):
 
 		minTime = self.getMinTime(source)
 		return self.getSeparation(minTime,source)
+
+	def getCentroidShift(self,source,sourceMass):
+		"""
+		Get an estimate for the astrometric
+		centriod shift for the event given
+		a source mass. Asuumes source is at
+		infinite distance and uses 1/parallax
+		as a distance estimate for lens.
+		
+		Args: 
+			source (skyobj): source skyobj
+					 to get centriod	
+					 shift for.
+
+			sourceMass (float): Mass of the source
+				            [Solar masss]
+
+		Returns:
+			shift (float): Centriod shift for the
+				event [mas]
+		"""
+
+		enstienR = 90.0 * np.sqrt(sourceMass * abs(self.parallax) / 1000.0)
+
+		mu = self.getMinDist(source) / enstienR
+
+		return (mu * enstienR) / (mu**2 + 2)
+
 	
 lens = skyobj(id=1,ra=176.454907296219, dec=-64.842957135494, pmra=2662.036, pmdec=-345.183, parallax=-215.78,epoch=2015.0)
 source = skyobj(id=2,ra=176.46360456073, dec=-64.8432977866831, pmra=-19.5, pmdec=-17.9,epoch=2015.0)
@@ -162,4 +190,4 @@ lens.getMinTime(source)
 print(lens.getMinDist(source))
 
 
-
+print(lens.getCentroidShift(source,1.0))
