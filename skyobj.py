@@ -181,13 +181,18 @@ class skyobj(object):
 
 		return (mu * enstienR) / (mu**2 + 2)
 
+	def getETime(self,source,sourceMass):
+
+		enstienR = 90.0 * np.sqrt(sourceMass * abs(self.parallax) / 1000.0)
+		mu = self.getMinDist(source) / enstienR
+
+		return enstienR / mu
 	
-lens = skyobj(id=1,ra=176.454907296219, dec=-64.842957135494, pmra=2662.036, pmdec=-345.183, parallax=-215.78,epoch=2015.0)
-source = skyobj(id=2,ra=176.46360456073, dec=-64.8432977866831, pmra=-19.5, pmdec=-17.9,epoch=2015.0)
+#lens = skyobj(id=1,ra=176.454907296219, dec=-64.842957135494, pmra=2662.036, pmdec=-345.183, parallax=-215.78,epoch=2015.0)
+#source = skyobj(id=2,ra=176.46360456073, dec=-64.8432977866831, pmra=0, pmdec=0,epoch=2015.0)
 
-lens.getMinTime(source)
+#print(lens.getMinTime(source))
+#print(lens.getMinDist(source))
 
-print(lens.getMinDist(source))
 
-
-print(lens.getCentroidShift(source,1.0))
+#print(lens.getCentroidShift(source,1.0))
