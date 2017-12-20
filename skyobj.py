@@ -80,7 +80,7 @@ class skyobj(object):
 		
 		mjd = Time(epoch, format='decimalyear').mjd
 		
-		EtaFinal = (-(self.parallax) *tp.RdotN(mjd, self.ra_0, self.dec_0) + 
+		EtaFinal = ((self.parallax) *tp.RdotN(mjd, self.ra_0, self.dec_0) + 
 			(self.pmdec) * (epoch - self.epoch_0) + self.eta_0)
 		XiFinal = ((self.parallax)* tp.RdotW(mjd, self.ra_0) + 
 			(self.pmra) * (epoch - self.epoch_0) + self.xi_0)
@@ -154,7 +154,7 @@ class skyobj(object):
 		minTime = self.getMinTime(source)
 		return self.getSeparation(minTime,source)
 
-	def getCentroidShift(self,source,sourceMass):
+	def getCentroidShift(self,source,sourceMass,lensMag,sourceMag):
 		"""
 		Get an estimate for the astrometric
 		centriod shift for the event given
@@ -176,9 +176,20 @@ class skyobj(object):
 		"""
 
 		enstienR = 90.0 * np.sqrt(sourceMass * abs(self.parallax) / 1000.0)
-
+		print('ER' + str(enstienR))
 		mu = self.getMinDist(source) / enstienR
+		
+		b1 = ((0.5*enstienR) * (mu +np.sqrt((mu**2) + 4))) - (mu * enstienR)
 
+		print('b1 : ' + str(b1))
+		#print('mu' + str(mu))
+
+		#lumeff =(1+(10** ((lensMag - sourceMag) / (-2.5))))
+		
+		#print('lensMag: ' +str(lensMag))
+		#print('SourceMag: ' +str(sourceMag))
+		#print('factor: ' +str(lumeff))
+		
 		return (mu * enstienR) / (mu**2 + 2)
 
 	def getETime(self,source,sourceMass):

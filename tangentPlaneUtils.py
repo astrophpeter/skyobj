@@ -40,6 +40,22 @@ def s2tp(ra, dec,raz,decz):
 
 	return xi, eta
 
+def tp2s(xi,eta,raz,decz):
+	"""
+	Convert from tangent plane coordinate system
+	to spherical coordinate system
+	"""
+
+	sdecz = np.sin(np.deg2rad(decz))
+	cdecz = np.cos(np.deg2rad(decz))
+	
+	denom = cdecz-eta*sdecz
+
+	np.arctan2(xi,denom) +
+
+	
+	
+
 
 def lSol(mjd):
 	# ecliptic longitude of the sun
@@ -65,7 +81,8 @@ def epsilonSol(mjd):
 
 
 def makeR(l, epsilon):
-	# position vector of the observer
+	# Returns Barycentric position of the observer (earth),
+	# l: is heliocentric elciptic londitude of the earth
 	R = np.array([np.cos(np.radians(l)),
 		np.cos(np.radians(epsilon))*np.sin(np.radians(l))
 		,np.sin(np.radians(epsilon))*np.sin(np.radians(l))]) * -1.0
@@ -76,7 +93,7 @@ def RdotW(mjd, alpha):
 	# dot product of position vector of the observer and the local west unit vector
 	#
 	# local west unit vector
-	W = np.array([np.sin(alpha),-np.cos(alpha),0])
+	W = np.array([np.sin(np.deg2rad(alpha)),-np.cos(np.deg2rad(alpha)),0])
 	# ecliptic longitude of the sun
 	longitude = lSol(mjd)
 	# Obliquity of the ecliptic
@@ -98,9 +115,9 @@ def RdotN(mjd, alpha, delta):
 	#
 	# local north unit vector
 	N = np.array([
-		-np.cos(alpha)*np.sin(delta),	
-		-np.sin(alpha)*np.sin(delta),
-		np.cos(delta)])
+		np.cos(np.deg2rad(alpha))*np.sin(np.deg2rad(delta)),	
+		- np.sin(np.deg2rad(alpha))*np.sin(np.deg2rad(delta)),
+		-np.cos(np.deg2rad(delta))])
 	# ecliptic longitude of the sun
 	longitude = lSol(mjd)
 	# Obliquity of the ecliptic
