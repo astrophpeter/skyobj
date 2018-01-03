@@ -38,20 +38,33 @@ def s2tp(ra, dec,raz,decz):
 	xi = ((180/np.pi)*3600*1000)*_cdecj*_sradifj/_denomj
 	eta = ((180/np.pi)*3600*1000)*(_sdecj*_cdecz-_cdecj*_sdecz*_cradifj)/_denomj
 
-	return xi, eta
+	return np.array([xi, eta])
 
 def tp2s(xi,eta,raz,decz):
 	"""
 	Convert from tangent plane coordinate system
 	to spherical coordinate system
 	"""
+	
+	xir = xi * (np.pi /180.0) / ((3600.0 * 1000.0))
+	etar = eta * (np.pi / 180.0) / ((3600.0 * 1000.0))
 
 	sdecz = np.sin(np.deg2rad(decz))
 	cdecz = np.cos(np.deg2rad(decz))
 	
-	denom = cdecz-eta*sdecz
+	denom = cdecz-(etar*sdecz)
+	
+	#Get ra in range 0-2Pi
+	ra = np.mod(np.arctan2(xir,denom) + np.deg2rad(raz),2*np.pi)
 
-	np.arctan2(xi,denom) +
+	if (ra < 0):
+		ra += 2*np.pi
+	
+	ra = ra * (180.0 / np.pi)	
+	
+	dec = (180.0 / np.pi) * np.arctan2(sdecz+etar*cdecz,np.hypot(xir,denom))
+
+	return np.array([ra,dec])
 
 	
 	

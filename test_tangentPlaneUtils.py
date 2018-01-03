@@ -1,16 +1,17 @@
-import sys
 import tangentPlaneUtils as tp
 import unittest
-from astropy.time import Time
 
+class TesttangentPlaneUtils(unittest.TestCase):
 
-t = Time(2445680.5,format='jd')
-time = t.mjd
+	# test if the zero point maps to the zero point on
+	# tangent plane.
+	def test_s2tp(self):
+		self.assertEqual(tp.s2tp(30.0,60.0,30.0,60)[0],0.0)
+		self.assertEqual(tp.s2tp(30.0,60.0,30.0,60)[1],0.0)
 
-print(t.decimalyear)
+	def test_tp2s(self):
+		self.assertAlmostEqual(tp.tp2s(0.0,0.0,30.0,60.0)[0],30.0)
+		self.assertAlmostEqual(tp.tp2s(0.0,0.0,30.0,60.0)[1],60.0)
 
-l=tp.lSol(time)
-e = tp.epsilonSol(time)
-
-
-print(tp.makeR(l,e))
+if __name__ == '__main__':
+	unittest.main()
