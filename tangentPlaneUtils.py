@@ -1,20 +1,46 @@
-#some functions for calculating
-#of proper motion and parallax in the 
-#tanget plane coordnates for a skyobj
+###############################################
+#      tangentPlaneUtils                      #
+# Some functions to help with calculating     #
+# proper motion of stars in the tangent plane,#
+# including parallax.                         #
+# @author Peter McGill                        #
+# @email pm625@cam.ac.uk                      #
+###############################################
 
 
-from astropy.time import Time
+from astropy.time import Time       
 import numpy as np
 
 
 def s2tp(ra, dec,raz,decz):
-	"""
-	Convert from spherical coordinate system
-	to tagent plane coordinates
-	"""
+	"""Convert from spherical coordinate system to 
+        tagent plane coordinates.
 
-	#Set the position of the tagent plane
-	#at the position of the lens
+	Taken directly from the starlink sub-routine
+        'sla_S2TP'. https://github.com/Starlink.
+
+	Args:
+           ra (float) : Right ascension of the point
+                        to be projected onto the
+			tangent plane. [degrees]
+
+           dec (float) : Delination of the point to
+                         be projected onto the 
+                         tangent plane. [degrees]
+
+           raz (float) : Right ascention of tangent 
+			 plane [degrees]
+
+	   decz (float) : Declination of tangent 
+			  plane [degrees]
+
+        Returns:
+	   coords: (np.array): Rectangular tangent plane
+                               coordinates [xi,eta]. 
+                               Units of [mas] from tangent 
+ 			       plane point. 
+                         
+	"""
 
 	# convert to radians
 	_rar = np.radians(ra)
@@ -43,7 +69,10 @@ def s2tp(ra, dec,raz,decz):
 def tp2s(xi,eta,raz,decz):
 	"""
 	Convert from tangent plane coordinate system
-	to spherical coordinate system
+	to spherical coordinate system.
+
+	Taken directly from the starlink sub-routine
+        'sla_TP2S'. https://github.com/Starlink.
 	"""
 	
 	xir = xi * (np.pi /180.0) / ((3600.0 * 1000.0))
