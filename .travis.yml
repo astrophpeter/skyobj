@@ -3,6 +3,7 @@ install:
  - pip install scipy
  - pip install astropy
 
-script: python test_skyobj.py
-	python test_tangentPlaneUtils.py
+script: 
+ - python test_skyobj.py
+ - python test_tangentPlaneUtils.py
 
