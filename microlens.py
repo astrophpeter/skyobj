@@ -79,6 +79,39 @@ def get_centroid_shift(lensMass,lensDist,minSep,sourceDist=None,
 		lumFactor = 1+(10** ((lensMag - sourceMag) / (-2.5)))
 		return (mu * EnstienR) / ((mu**2 + 2)*lumFactor) 
 
+def get_enstien_T(lensMass,lensDist,minSep,lensPmMag,sourceDist=None):
+	"""Calculates the entirn time, or duration of the photo
+	metric signal of the event.
+	
+	Args: 
+	   lensMass (float) : lensMass (float) : Mass of the foreground
+                              lens object [Msol]
+
+           lensDist (float) : Distance to the lens
+                              [pc]
+
+           SourceDist (float,optional) : Distance to the source.
+                                         defaults to None. If none,
+                                         caculation will assume sourceDist
+                                         to be at infinity. [pc]
+
+           minSep (float) : Minumin angular separation between the lens
+                            abd source [mas]
+
+	   lensPmMag (float) : Magnitude of Lens Proper motion 
+			      [mas/yr]
+
+	Returns:
+	   EnstienTime (float) : Photmetric signal duration of the event.
+				 [yrs]
+	"""
+	EnstienR = get_enstien_R(lensMass,lensDist,sourceDist)
+
+	return EnstienR / lensPmMag
+
+
+
+ 
 #def get_dist(parallax):
 #	"""Calculates the distance to an object given
 #	   its parallax
