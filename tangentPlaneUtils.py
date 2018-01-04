@@ -73,6 +73,26 @@ def tp2s(xi,eta,raz,decz):
 
 	Taken directly from the starlink sub-routine
         'sla_TP2S'. https://github.com/Starlink.
+
+	Args:
+	   xi (float) : Xi tangent plane coordinate
+			to be mapped onto the sphere
+			[mas]
+	
+	   Eta (float) : Eta tagenet planr coordinate to
+                         to be mapped onto the sphere
+			 [mas]
+
+	   raz (float) : Right ascention of tangent
+                         plane [degrees]
+
+	   decz (float) : Declination of tangent
+                          plane [degrees]
+
+	Returns:
+	   coords: (np.array): Spherical coordinates [Ra,Dec].
+                               Units of [degrees]
+
 	"""
 	
 	xir = xi * (np.pi /180.0) / ((3600.0 * 1000.0))

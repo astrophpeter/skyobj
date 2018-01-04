@@ -6,4 +6,4 @@ install:
 script: 
  - python test_skyobj.py
  - python test_tangentPlaneUtils.py
- - python test_microLens.py
+ - python test_microlens.py

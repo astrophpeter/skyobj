@@ -39,6 +39,12 @@ class Testskyobj(unittest.TestCase):
 	def test_parallax_none_init(self):
                 self.assertEqual(self.obj2.parallax,0.0)
 
+	def test_xi_init(self):
+                self.assertEqual(self.obj2.xi_0,0.0)
+
+	def test_eta_init(self):
+                self.assertEqual(self.obj2.eta_0,0.0)
+
 
 if __name__ == '__main__':
 	unittest.main()

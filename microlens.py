@@ -77,7 +77,7 @@ def get_centroid_shift(lensMass,lensDist,minSep,sourceDist=None,
 	
 	else:
 		lumFactor = 1+(10** ((lensMag - sourceMag) / (-2.5)))
-		return (mu * EnstienR) / ((m**2 + 2)*lumFactor) 
+		return (mu * EnstienR) / ((mu**2 + 2)*lumFactor) 
 
 #def get_dist(parallax):
 #	"""Calculates the distance to an object given
