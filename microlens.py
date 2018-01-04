@@ -80,7 +80,7 @@ def get_centroid_shift(lensMass,lensDist,minSep,sourceDist=None,
 		return (mu * EnstienR) / ((mu**2 + 2)*lumFactor) 
 
 def get_enstien_T(lensMass,lensDist,minSep,lensPmMag,sourceDist=None):
-	"""Calculates the entirn time, or duration of the photo
+	"""Calculates the enstien time, or duration of the photo
 	metric signal of the event.
 	
 	Args: 
@@ -105,12 +105,47 @@ def get_enstien_T(lensMass,lensDist,minSep,lensPmMag,sourceDist=None):
 	   EnstienTime (float) : Photmetric signal duration of the event.
 				 [yrs]
 	"""
-	EnstienR = get_enstien_R(lensMass,lensDist,sourceDist)
+	EnstienR = get_enstien_R(lensMass,lensDist,sourceDist=sourceDist)
 
 	return EnstienR / lensPmMag
 
+def get_astrometric_T(lensMass,lensDist,minSep,accuracy,lensPmMag,sourceDist=None):
+	"""Calcualte the duration of the astrometric signal given,
+	a detection accuracy.
 
+	Formula taken from Honma 2006 or can be found as Eq. (15)
+	in Proft et al (2012).
 
+	Args: 
+	   lensMass (float) : lensMass (float) : Mass of the foreground
+                              lens object [Msol]
+
+           lensDist (float) : Distance to the lens
+                              [pc]
+
+           SourceDist (float,optional) : Distance to the source.
+                                         defaults to None. If none,
+                                         caculation will assume sourceDist
+                                         to be at infinity. [pc]
+
+           minSep (float) : Minumin angular separation between the lens
+                            abd source [mas]
+	   
+	   accuracy (float) : Minimum detection accuracy [mas]
+
+           lensPmMag (float) : Magnitude of Lens Proper motion
+                              [mas/yr]
+
+	Returns:
+	   astrometricTime (float) : Duration of Astrometric Signal 
+				     [yrs]
+
+	"""
+	
+	enstienR = get_enstien_R(lensMass,lensDist,sourceDist=sourceDist)
+	enstienT = get_enstien_T(lensMass,lensDist,minSep,lensPmMag,sourceDist=sourceDist)
+
+	return (np.pi / 2.0) * ((enstienT * enstienR) / accuracy)	
  
 #def get_dist(parallax):
 #	"""Calculates the distance to an object given
