@@ -65,5 +65,14 @@ class TestmicroLens(unittest.TestCase):
 		#self.assertAlmostEqual(m.get_astrometric_T(0.45,42.9,9.243*4.0,0.057,341.0)*364.25,2525,places=0)
 		self.assertAlmostEqual(m.get_astrometric_T(0.3,92.5,5.138*2.4,1.992,331.0)*364.25,23,places=0)
 		self.assertAlmostEqual(m.get_astrometric_T(0.35,55.7,7.149*21.3,0.721,386.0)*364.25,105,places=0)
+
+	def test_get_dist(self):
+		#check some simple rough calculations of distance using 1/parallax
+		self.assertAlmostEqual(m.get_dist(215.0),4.6511627907)
+		self.assertAlmostEqual(m.get_dist(34.4),29.0697674419)
+		self.assertAlmostEqual(m.get_dist(145.7),6.86341798216)
+
+
+
 if __name__ == '__main__':
         unittest.main()

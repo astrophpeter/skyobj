@@ -147,10 +147,19 @@ def get_astrometric_T(lensMass,lensDist,minSep,accuracy,lensPmMag,sourceDist=Non
 
 	return (np.pi / 2.0) * ((enstienT * enstienR) / accuracy)	
  
-#def get_dist(parallax):
-#	"""Calculates the distance to an object given
-#	   its parallax
-#
-#	"""
+def get_dist(parallax):
+	"""Calculates the distance to an object given
+	   its parallax.
+
+	Args:
+	   parallax (float) : parallax [mas]
+
+	Returns:
+	   distance (float) : distance [pc]
+
+	"""
+
+	return 1000.0 / parallax
+	
 
 	
