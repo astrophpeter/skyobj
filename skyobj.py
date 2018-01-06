@@ -76,7 +76,7 @@ class skyobj(object):
 
 		"""
 
-		Xi,Eta = getXiEta(epoch)
+		Xi,Eta = self.getXiEta(epoch)
 
 		ra,dec = tp.tp2s(Xi,Eta,self.ra_0,self.dec_0)
 		
@@ -187,11 +187,11 @@ class skyobj(object):
 		return m.get_centroid_shift(lensMass,lensDist,minSep,lensMag=self.gMag,sourceMag=source.gMag)
  		
 	
-lens = skyobj(id=1,ra=176.454907296219, dec=-64.842957135494, pmra=2662.036, pmdec=-345.183, parallax=215.78,epoch=2015.0)
-source = skyobj(id=2,ra=176.46360456073, dec=-64.8432977866831, pmra=0, pmdec=0,epoch=2015.0)
+#lens = skyobj(id=1,ra=176.454907296219, dec=-64.842957135494, pmra=2662.03572627, pmdec=-345.18255501, parallax=215.78,epoch=2015.0)
+#source = skyobj(id=2,ra=176.46360456073, dec=-64.8432977866831, pmra=-19.5, pmdec=-17.89999962,epoch=2015.0)
 
-print(lens.getMinTime(source))
-print(lens.getMinDist(source))
+#print(lens.getMinTime(source))
+#print(lens.getMinDist(source))
 
 
-print(lens.getCentroidShift(source,1.0))
+#print(lens.getCentroidShift(source,1.0))
