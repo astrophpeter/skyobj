@@ -11,6 +11,8 @@ from astropy.time import Time
 from scipy.optimize import minimize_scalar
 import tangentPlaneUtils as tp
 import microlens as m
+import matplotlib.pylab as plt
+from astropy.time import Time
 
 class skyobj(object):
 
@@ -185,13 +187,66 @@ class skyobj(object):
 		minSep = self.getMinDist(source)		
 
 		return m.get_centroid_shift(lensMass,lensDist,minSep,lensMag=self.gMag,sourceMag=source.gMag)
- 		
+ 	
+	def getCentriodShift_at(self,source,lensMass,sep):
+
+		lensDist = m.get_dist(self.parallax)
+
+		return m.get_centroid_shift(lensMass,lensDist,sep,lensMag=self.gMag,sourceMag=source.gMag)	
 	
+
+refepoch = Time(2015.0,format='jyear')
+print(refepoch.jd)
+
+
+lens = skyobj(id=1,ra=176.4549073, dec=-64.84295714, pmra=2662.03572627, pmdec=-345.18255501, parallax=215.782333,epoch=2015.0)
+source1 = skyobj(id=2,ra=176.46360456, dec=-64.84329779, pmra=-19.5, pmdec=-17.89999962,epoch=2015.0)
+
+
+
+refposRa,refposDec = lens.getRaDec(refepoch.decimalyear)
+
+print(refposRa)
+print(refposDec)
+
+time = np.linspace(2018.86480945,2020.893842442573,num=1000)
+astrotime = Time(time,format='jyear')
+print(astrotime.jd)
+
+ras = np.array([])
+decs = np.array([])
+raSources = np.array([])
+decSources = np.array([])
+
+#for t in time:
+#	ra,dec = lens.getRaDec(t)
+#	raSource,decSource = source.getRaDec(t)
+#	ras = np.append(ras,ra)
+#	decs = np.append(decs,dec)
+#	raSources = np.append(raSources,raSource)
+#	decSources = np.append(decSources,decSource)
+
+
+#plt.plot((ras-refposRa)*3600.0,(decs-refposDec)*3600.0,label='lens')
+#plt.plot((raSources-refposRa)*3600.0*np.cos(np.deg2rad(refposDec)),(decSources-refposDec)*3600.0*np.cos(np.deg2rad(refposDec)),label='source')
+
+#plt.xlabel('relative ra*cos(dec) position [arcseconds]')
+#plt.ylabel('relative dec position [arcseconds]')
+#plt.ylim(-0.6,0.6)
+#plt.title('lawd37 2019.9pm1yr')
+#plt.legend()
+#plt.show()
+
+
+ 
+
+
 #lens = skyobj(id=1,ra=176.454907296219, dec=-64.842957135494, pmra=2662.03572627, pmdec=-345.18255501, parallax=215.78,epoch=2015.0)
 #source = skyobj(id=2,ra=176.46360456073, dec=-64.8432977866831, pmra=-19.5, pmdec=-17.89999962,epoch=2015.0)
 
-#print(lens.getMinTime(source))
-#print(lens.getMinDist(source))
+print(lens.getMinTime(source1))
+print(lens.getMinDist(source1))
 
 
-#print(lens.getCentroidShift(source,1.0))
+#print("Centroid Shift a Closest Approach: "+ str(lens.getCentroidShift(source,0.75)))
+#print("Centriod Shift at 300 mas: " + str(lens.getCentriodShift_at(source,0.75,300.0)))

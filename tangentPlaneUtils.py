@@ -145,9 +145,9 @@ def epsilonSol(mjd):
 def makeR(l, epsilon):
 	# Returns Barycentric position of the observer (earth),
 	# l: is heliocentric elciptic londitude of the earth
-	R = np.array([np.cos(np.radians(l)),
-		np.cos(np.radians(epsilon))*np.sin(np.radians(l))
-		,np.sin(np.radians(epsilon))*np.sin(np.radians(l))]) * -1.0
+	R = np.array([-np.cos(np.radians(l)),
+		-np.cos(np.radians(epsilon))*np.sin(np.radians(l))
+		,-np.sin(np.radians(epsilon))*np.sin(np.radians(l))])
 	return R
 
 

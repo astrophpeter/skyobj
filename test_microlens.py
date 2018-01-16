@@ -17,6 +17,9 @@ class TestmicroLens(unittest.TestCase):
 		self.assertAlmostEqual(m.get_enstien_R(0.45,42.9),9.243,places=1)
 		self.assertAlmostEqual(m.get_enstien_R(0.3,92.5),5.138,places=1)
 		self.assertAlmostEqual(m.get_enstien_R(0.35,55.7),7.149,places=1)
+		
+		#Independent number check
+		self.assertAlmostEqual(m.get_enstien_R(0.75,4.63),36.30334758)
 
 	def test_get_centroid_shift_dark_lens(self):
 		#check to 0.1 mas precision (limited by data provided by Proft)
@@ -71,8 +74,13 @@ class TestmicroLens(unittest.TestCase):
 		self.assertAlmostEqual(m.get_dist(215.0),4.6511627907)
 		self.assertAlmostEqual(m.get_dist(34.4),29.0697674419)
 		self.assertAlmostEqual(m.get_dist(145.7),6.86341798216)
-
-
+	
+	#Number independently checked
+	def test_centroid_shift_source(self):
+		self.assertAlmostEqual(m.get_source_centriod_shift(0.75,4.63,150.0),8.324264445)
+		self.assertAlmostEqual(m.get_source_centriod_shift(0.75,4.63,400.0),3.268130914)
+		self.assertAlmostEqual(m.get_source_centriod_shift(0.75,4.63,280.0),4.630332383)
+		self.assertAlmostEqual(m.get_source_centriod_shift(0.30,50.0,26.0),1.758598849)		
 
 if __name__ == '__main__':
         unittest.main()

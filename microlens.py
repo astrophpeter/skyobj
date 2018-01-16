@@ -110,8 +110,8 @@ def get_enstien_T(lensMass,lensDist,minSep,lensPmMag,sourceDist=None):
 	return EnstienR / lensPmMag
 
 def get_astrometric_T(lensMass,lensDist,minSep,accuracy,lensPmMag,sourceDist=None):
-	"""Calcualte the duration of the astrometric signal given,
-	a detection accuracy.
+	"""Calcualte the duration of the astrometric signal given of the whole centriod image,
+	a detection accuriacy.
 
 	Formula taken from Honma 2006 or can be found as Eq. (15)
 	in Proft et al (2012).
@@ -160,6 +160,35 @@ def get_dist(parallax):
 	"""
 
 	return 1000.0 / parallax
-	
 
 	
+	 
+	
+def get_source_centriod_shift(lensMass,lensDist,sep,sourceDist=None):
+	"""Calculates the centroid shift of the source position
+	due to the brightest image.
+
+	See Eq (2) of Sahu et al (2017)
+
+	Args:
+           lensMass (float) : lensMass (float) : Mass of the foreground
+                              lens object [Msol]
+
+           lensDist (float) : Distance to the lens
+                              [pc]
+
+           SourceDist (float,optional) : Distance to the source.
+                                         defaults to None. If none,
+                                         caculation will assume sourceDist
+                                         to be at infinity. [pc]
+	"""
+	
+	einstienR = get_enstien_R(lensMass,lensDist,sourceDist)
+	u = sep / einstienR
+
+	return 0.5 * (np.sqrt(u**2 +4)-u) * einstienR
+
+
+
+
+ 	
